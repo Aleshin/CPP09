@@ -65,7 +65,7 @@ void BitcoinExchange::processLine(const std::string& line) const {
 
     size_t pos = line.find('|');
     if (pos == std::string::npos) {
-        std::cerr << "Error: bad input => " << line << std::endl;
+        std::cerr << "Error: ther is no | separator => " << line << std::endl;
         return;
     }
 
@@ -75,7 +75,7 @@ void BitcoinExchange::processLine(const std::string& line) const {
     char* end;
     double value = strtod(valueStr.c_str(), &end);
     if (*end != '\0') {
-        std::cerr << "Error: bad input => " << line << std::endl;
+        std::cerr << "Error: not a number => " << line << std::endl;
         return;
     }
     if (value < 0) {
@@ -87,7 +87,7 @@ void BitcoinExchange::processLine(const std::string& line) const {
         return;
     }
     if (!isValidDate(date)) {
-        std::cerr << "Error: bad input => " << date << std::endl;
+        std::cerr << "Error: bad date => " << date << std::endl;
         return;
     }
 
