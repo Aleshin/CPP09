@@ -12,11 +12,21 @@ std::string BitcoinExchange::trim(const std::string& s) {
 
 bool BitcoinExchange::isValidDate(const std::string& d) const {
     if (d.size() != 10 || d[4] != '-' || d[7] != '-') return false;
-    for (size_t i = 0; i < d.size(); i++) {
-        if (i == 4 || i == 7) continue;
-        if (!std::isdigit(d[i])) return false;
-    }
-    return true;
+    for (size_t i = 0; i < d.size(); ++i)
+        if (i != 4 && i != 7 && !std::isdigit(static_cast<unsigned char>(d[i])))
+            return false;
+
+    int y = std::atoi(d.substr(0, 4).c_str());
+    int m = std::atoi(d.substr(5, 2).c_str());
+    int day = std::atoi(d.substr(8, 2).c_str());
+    if (m < 1 || m > 12) return false;
+
+    static const int dim[] = {31,28,31,30,31,30,31,31,30,31,30,31};
+    int days = dim[m - 1];
+    bool leap = (y % 4 == 0) && (y % 100 != 0 || y % 400 == 0);
+    if (m == 2 && leap) days = 29;
+
+    return day >= 1 && day <= days;
 }
 
 BitcoinExchange::BitcoinExchange() {}
