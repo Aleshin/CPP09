@@ -1,20 +1,24 @@
 #include "PmergeMe.hpp"
-#include <iostream>
+#include <cstdlib>
 
 int main(int argc, char** argv) {
     if (argc < 2) {
-        std::cerr << "Error" << std::endl;
+        std::cerr << "Usage: " << argv[0] << " <list of integers>\n";
         return 1;
     }
 
-    try {
-        PmergeMe sorter;
-        sorter.loadInput(argc, argv);
-        sorter.printBefore();
-        sorter.printAfter();
-    } catch (std::exception& e) {
-        std::cerr << "Error" << std::endl;
-        return 1;
+    std::vector<int> input;
+    input.reserve(argc - 1);
+
+    for (int i = 1; i < argc; ++i) {
+        input.push_back(std::atoi(argv[i]));
     }
+
+    PmergeMe sorter(input);
+
+    sorter.print(1);
+    sorter.FordJohnson();
+    sorter.Insertion(1);
+    sorter.print(1);
     return 0;
 }
