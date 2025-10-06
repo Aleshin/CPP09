@@ -8,7 +8,7 @@
 class PmergeMe {
 private:
     std::vector<int> _numbers;
-    size_t _level;
+    size_t _blockSize;
 
 public:
     PmergeMe();

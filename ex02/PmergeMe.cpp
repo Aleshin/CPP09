@@ -2,34 +2,33 @@
 #include <iomanip>
 #include <algorithm>
 
-PmergeMe::PmergeMe() : _level(0) {}
+PmergeMe::PmergeMe() : _blockSize(1) {}
 
 PmergeMe::PmergeMe(const std::vector<int>& input)
-    : _numbers(input), _level(0) {}
+    : _numbers(input), _blockSize(1) {}
 
 PmergeMe::~PmergeMe() {}
 
 void PmergeMe::FordJohnson() {
     size_t n = _numbers.size();
-    size_t stride = 1ull << _level;
-    size_t step   = stride * 2;
+    size_t step   = _blockSize * 2;
 
     if (step > n) return;
 
-    for (size_t i = 0; i + stride < n; i += step) {
-        size_t a1 = i + stride - 1;
+    for (size_t i = 0; i + _blockSize < n; i += step) {
+        size_t a1 = i + _blockSize - 1;
         size_t a2 = std::min(i + step - 1, n - 1);
         if (_numbers[a1] > _numbers[a2]) {
-            for (size_t k = 0; k < stride && i + stride + k < n; ++k)
-                std::swap(_numbers[i + k], _numbers[i + stride + k]);
+            for (size_t k = 0; k < _blockSize && i + _blockSize + k < n; ++k)
+                std::swap(_numbers[i + k], _numbers[i + _blockSize + k]);
         }
     }
-    PmergeMe::print(stride*2);
-    ++_level;
+    PmergeMe::print(step);
+    _blockSize *=2;
     FordJohnson();
-    --_level;
-    Insertion(stride*2);
-    PmergeMe::print(stride*2);
+    _blockSize /=2;
+    Insertion(step);
+    PmergeMe::print(step);
 }
 
 void PmergeMe::Insertion(size_t block)
@@ -69,7 +68,7 @@ void PmergeMe::print(size_t blockSize) const
 {
     const size_t n = _numbers.size();
 
-    std::cout << "[level " << _level << ", block " << blockSize << "]  ";
+    std::cout << "block " << blockSize << ": ";
 
     for (size_t i = 0; i < n; i += blockSize)
     {
