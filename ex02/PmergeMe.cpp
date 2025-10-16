@@ -7,6 +7,18 @@ PmergeMe::PmergeMe() : _blockSize(1) {}
 PmergeMe::PmergeMe(const std::vector<int>& input)
     : _numbers(input), _blockSize(1) {}
 
+PmergeMe::PmergeMe(const PmergeMe& other)
+    : _numbers(other._numbers), _blockSize(other._blockSize) {
+}
+
+PmergeMe& PmergeMe::operator=(const PmergeMe& other) {
+    if (this != &other) {
+        _numbers   = other._numbers;
+        _blockSize = other._blockSize;
+    }
+    return *this;
+}
+
 PmergeMe::~PmergeMe() {}
 
 void PmergeMe::FordJohnson() {

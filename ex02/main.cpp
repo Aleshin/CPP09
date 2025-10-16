@@ -22,3 +22,4 @@ int main(int argc, char** argv) {
     sorter.print(1);
     return 0;
 }
+//test: ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`

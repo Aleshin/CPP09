@@ -13,6 +13,8 @@ private:
 public:
     PmergeMe();
     explicit PmergeMe(const std::vector<int>& input);
+    PmergeMe(const PmergeMe& other);
+    PmergeMe& operator=(const PmergeMe& other);
     ~PmergeMe();
 
     void Insertion(size_t stride);
