@@ -27,11 +27,11 @@ void PmergeMe::FordJohnson() {
 
     if (step > n) return;
 
-    for (size_t i = 0; i + _blockSize < n; i += step) {
-        size_t a1 = i + _blockSize - 1;
-        size_t a2 = std::min(i + step - 1, n - 1);
+    for (size_t i = 0; i + step <= n; i += step) {
+        const size_t a1 = i + _blockSize - 1;
+        const size_t a2 = i + step - 1;
         if (_numbers[a1] > _numbers[a2]) {
-            for (size_t k = 0; k < _blockSize && i + _blockSize + k < n; ++k)
+            for (size_t k = 0; k < _blockSize; ++k)
                 std::swap(_numbers[i + k], _numbers[i + _blockSize + k]);
         }
     }
@@ -46,16 +46,11 @@ void PmergeMe::FordJohnson() {
 static std::vector<std::size_t> buildJacobsthalOrder(std::size_t m) {
     std::vector<std::size_t> order;
     if (m <= 1) return order;
-
-    order.push_back(0);
-    if (m == 1) return order;
-
+    order.push_back(1);
     std::size_t prev = 1, j0 = 1, j1 = 1;
-
     while (prev < m - 1) {
-        std::size_t curr = j1 < (m - 1) ? j1 : (m - 1);
-        for (std::size_t i = curr; i > prev; --i)
-            order.push_back(i);
+        std::size_t curr = (j1 < (m - 1)) ? j1 : (m - 1);
+        for (std::size_t i = curr; i > prev; --i) order.push_back(i);
         prev = curr;
         std::size_t next = j1 + 2 * j0; j0 = j1; j1 = next;
     }
@@ -80,7 +75,15 @@ void PmergeMe::Insertion(std::size_t block)
     const std::size_t m = full_blocks / 2 + full_blocks % 2; // number of B include last one
     std::vector<int> MainChain = buildMainChain(_numbers, block);  // M = B0 A0 A1 A2 ...
 
-    if (m <= 1) { _numbers.swap(MainChain); return; }
+    if (m <= 1) {
+    // append tail (< block) if any
+        if (full_blocks * block < n)
+            MainChain.insert(MainChain.end(),
+                             _numbers.begin() + full_blocks * block,
+                             _numbers.end());
+    _numbers.swap(MainChain);
+    return;
+}
 
     const std::vector<std::size_t> JacobsthalOrder = buildJacobsthalOrder(m); // indices i in [1..m-1]
 
