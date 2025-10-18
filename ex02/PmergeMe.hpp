@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <algorithm>
+#include <sys/time.h>
 
 class PmergeMe {
 private:
@@ -20,6 +21,12 @@ public:
     void Insertion(size_t stride);
     void FordJohnson();
     void print(size_t blockSize) const;
+	static double getCurrentTime() {
+		struct timeval tv;
+		gettimeofday(&tv, NULL);
+		return tv.tv_sec * 1000000.0 + tv.tv_usec;
+    }
+
 };
 
 #endif

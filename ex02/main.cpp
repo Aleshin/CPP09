@@ -17,9 +17,13 @@ int main(int argc, char** argv) {
     PmergeMe sorter(input);
 
     sorter.print(1);
+	double start = PmergeMe::getCurrentTime();
     sorter.FordJohnson();
     sorter.Insertion(1);
     sorter.print(1);
+    double end = PmergeMe::getCurrentTime();
+    std::cout << "Time to process a range of " << input.size() << " elements with std::vector: " << (end - start) / 1000.0 << " ms\n";
     return 0;
 }
-//test: ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+//Linux: ./PmergeMe `shuf -i 1-100000 -n 3000 | tr "\n" " "`
+//macOS: ./PmergeMe `jot -r 3000 1 100000 | tr '\n' ' '`
