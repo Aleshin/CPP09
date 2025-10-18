@@ -2,6 +2,7 @@
 #define PMERGEME_HPP
 
 #include <vector>
+#include <deque>
 #include <iostream>
 #include <algorithm>
 #include <sys/time.h>
@@ -9,6 +10,7 @@
 class PmergeMe {
 private:
     std::vector<int> _numbers;
+    std::deque<int> _numbersDeq;
     size_t _blockSize;
 
 public:
@@ -18,9 +20,13 @@ public:
     PmergeMe& operator=(const PmergeMe& other);
     ~PmergeMe();
 
-    void Insertion(size_t stride);
-    void FordJohnson();
+    void InsertionVec(size_t stride);
+    void InsertionDeq(size_t stride);
+    void FordJohnsonVec();
+    void FordJohnsonDeq();
+    void printNums() const;
     void print(size_t blockSize) const;
+    void printDeq(size_t blockSize) const;
 	static double getCurrentTime() {
 		struct timeval tv;
 		gettimeofday(&tv, NULL);
